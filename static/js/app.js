@@ -1,10 +1,33 @@
+// // Creat a Function to Get the Data
+// function getData() {
+
+//     // Fetch the JSON data and console log it
+//         d3.json("samples.json").then(function(data) {
+//         console.log(data);
+
+//     // Promise Pending
+//         const dataPromise = d3.json("samples.json");
+//         console.log("Data Promise: ", dataPromise);
+
+//     // Declare Variable
+//         allData = data
+//         console.log(allData)
+//     });
+// }
+
+//getData();
+
 // Create a Function to Build both Bar Chart and Bubble Chart
 function buildPlots() {
     
     // Fetch the JSON data and console log it
         d3.json("samples.json").then(function(data) {
             console.log(data);
-        
+
+    // Promise Pending
+        const dataPromise = d3.json("samples.json");
+            console.log("Data Promise: ", dataPromise);
+
     // Grab values from the data json object to build the Bar Chart and Bubble Chart for first Subject
         var sample = data.samples[0];
 
@@ -12,7 +35,7 @@ function buildPlots() {
         var trace1 = {
             x: sample.sample_values.slice(0, 10).reverse(),
             y: sample.otu_ids.slice(0, 10).map(number => `OTU ID ${number}`).reverse(),
-            hovertext: sample.otu_labels.slice(0, 10),
+            hovertext: sample.otu_labels.slice(0, 10).reverse(),
             type: "bar",
             orientation: "h",
         };
@@ -31,7 +54,7 @@ function buildPlots() {
             }
         };
       
-   // Plot the chart to a div tag with id "bar"
+    // Plot the chart to a div tag with id "bar"
         Plotly.newPlot("bar", data1, layout1);
 
     // Create the trace for Bubble Chart
@@ -59,7 +82,6 @@ function buildPlots() {
 
     // Plot the chart to a div tag with id "bubble"
         Plotly.newPlot("bubble", data2, layout2); 
-
     });
 }
 
@@ -67,14 +89,22 @@ buildPlots();
 
 
 // Create a Function to Provide Demographic Information
-// function buildInfo() {
+function buildInfo() {
 
-//     // Fetch the JSON data and console log it
-//         d3.json("samples.json").then(function(data) {
-//             console.log(data);
+    // Fetch the JSON data and console log it
+        d3.json("samples.json").then(function(data) {
+            console.log(data);
     
-//     // Grab values from the data json object to build the Metadata for first Subject
-//         var sample = data.samples[0];
-// }
+    // Promise Pending
+        const dataPromise = d3.json("samples.json");
+            console.log("Data Promise: ", dataPromise);
 
-// buildInfo();
+    // Grab values from the data json object to build the list of Subect ID Numbers
+        var names = data.names;
+            console.log(names);
+
+        
+    });
+}
+
+buildInfo();
