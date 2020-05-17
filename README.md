@@ -1,3 +1,3 @@
 # plotly-challenge
 
-![](Screencapture.PNG)
+![](Screencapture.png)
