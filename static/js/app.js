@@ -3,7 +3,7 @@ d3.json('samples.json').then(function(data){
     console.log(data);
 
     // Create a Function to Build the List of Subject ID Numbers
-    function buildInfo(data) {
+    function buildId(data) {
 
         // Grab values from the data json object to build the list of Subect ID Nos.
         var names = data.names;
@@ -15,15 +15,48 @@ d3.json('samples.json').then(function(data){
             static.append("option")
             .text(name)
             .attr("value", name)
-            })
+            }) 
     }
     
+
+    // Creat a Function to Build the Demographic Information
+    function buildDemographic(data,name) {
+
+        // Grab values from the data json object by matching on Subject ID No. to build the Demographic Information
+        var meta = data.metadata.forEach(function(metadata){
+            if (metadata.id==name){
+                return(metadata)
+            }
+        })
+
+        // Define variable to later be utilized after Looping through Entire Row of Data
+        var subject
+
+            data.metadata.forEach(function(subjectData){
+                if (subjectData.id==name){
+                    subject = subjectData
+                }
+            })
+        
+        // Select Demographic Panel to a div tag with id "sample-metadata" from HTML file to place data
+       var demographicInfo = d3.select("#sample-metadata");
+        
+       // Clear the Demographic Panel each time before a new Subject ID No. is selected
+        demographicInfo.html("");
+  
+       // grab the necessary demographic data data for the id and append the info to the panel
+        Object.entries(subject).forEach(([key, value]) => {   
+            demographicInfo.append("h6").text(`${key}:${value}`);    
+        });
+    }
+
+
     // Create a Function to Build the Bar Chart and Bubble Chart  
     function buildPlots(data,name) {
     
         // Grab values from the data json object by matching on Subject ID No. to build the Bar Chart and Bubble Chart
         var meta = data.metadata.forEach(function(metadata){
-            if (metadata.id===name){
+            if (metadata.id==name){
                 return(metadata)
             }
         })
@@ -32,7 +65,7 @@ d3.json('samples.json').then(function(data){
         var sample
 
             data.samples.forEach(function(sampleData){
-                if (sampleData.id===name){
+                if (sampleData.id==name){
                     sample = sampleData
                 }
             })
@@ -51,7 +84,7 @@ d3.json('samples.json').then(function(data){
       
         // Define the plot layout for the Bar Chart
         var layout1 = {
-            title: "Top 10 Samples per Subject",
+            title: "Top 10 Samples per Selected Subject",
             margin: {
                 t: 100,
                 b: 100,
@@ -80,7 +113,7 @@ d3.json('samples.json').then(function(data){
     
         // Define the plot layout for the Bubble Chart
         var layout2 = {
-            title: "All Samples per Subject",
+            title: "All Samples per Selected Subject",
             xaxis:{title: "OTU ID"},
             height: 600,
             width: 1200
@@ -90,14 +123,26 @@ d3.json('samples.json').then(function(data){
         Plotly.newPlot("bubble", data2, layout2); 
         }
     
-    // Call the buildInfo Function
-    buildInfo(data);
-    
-    // Call the buildPlots Function after attaching an Event Listener to select a Subject ID from Dropdown Menu
+    // Call the buildId Function
+    buildId(data);
+
+    // Call the buildDemographic and buildPlots Functions after attaching an Event Listener to select a Subject ID from Dropdown Menu
     d3.select('#selDataset').on('change',function(){
         name =  d3.select(this).property('value');
-        console.log(name)
+        console.log(name);
+        buildDemographic(data,name);
         buildPlots(data,name);
     })
+
+
+    // Create a Function to Display the Initial Data Rendering on the First Subject ID No. 940
+    function init() {
+        buildDemographic(data,940);
+        buildPlots(data,940);
+    }
+
+    // Call the init Function
+    init();
+
 })
 
