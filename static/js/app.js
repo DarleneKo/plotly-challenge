@@ -44,7 +44,7 @@ d3.json('samples.json').then(function(data){
        // Clear the Demographic Panel each time before a new Subject ID No. is selected
         demographicInfo.html("");
   
-       // grab the necessary demographic data data for the id and append the info to the panel
+       // Extract the key and value pair after looping through the Metadata and Appending to the Demographic Panel
         Object.entries(subject).forEach(([key, value]) => {   
             demographicInfo.append("h6").text(`${key}:${value}`);    
         });
@@ -121,7 +121,7 @@ d3.json('samples.json').then(function(data){
     
         // Plot the chart to a div tag with id "bubble"
         Plotly.newPlot("bubble", data2, layout2); 
-        }
+    }
     
     // Call the buildId Function
     buildId(data);
@@ -137,10 +137,11 @@ d3.json('samples.json').then(function(data){
 
     // Create a Function to Display the Initial Data Rendering on the First Subject ID No. 940
     function init() {
-        buildDemographic(data,940);
-        buildPlots(data,940);
+        var firstSample = data.names[0];
+        buildDemographic(data,firstSample);
+        buildPlots(data,firstSample);
     }
-
+    
     // Call the init Function
     init();
 
